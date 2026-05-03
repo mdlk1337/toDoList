@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+}
+
+.toDolist__wrapper {
+    width: 400px;
+    margin: 0 auto;
+    margin-bottom: 80px;
+    margin-top: 20px;
+}
+
+.toDolist {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.btns {
+    display: flex;
+    justify-content: space-around;
+}
+
+.task {
+    margin: 0 auto;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 20px;
+    align-items: center;
+    height: 52px;
+}
+
+.inputError::placeholder {
+    color: red;
+    font-size: 10px;
+}
+
+.allToggle {
+    width: 440px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+
+.deleteCheckbox {
+    display: none;
+}
