@@ -86,9 +86,10 @@ function addTask() {
     
     render();
 }
+ 
 
 function deleteTask(event) {
-    let id = event.currentTarget.dataset.id
+    let id = event.currentTarget.dataset.id;
     arrTasks = arrTasks.filter((task) => task.id !== Number(id));
     render();
 }
@@ -96,7 +97,7 @@ function deleteTask(event) {
 finishBtn.addEventListener('click', finishTask);
 
 function finishTask() {
-    let doneTask = arrTasks.filter((task) => task.isDone === true)
+    let doneTask = arrTasks.filter((task) => task.isDone === true);
     render(doneTask);
 }
 
@@ -152,7 +153,7 @@ function allCheckboxToggle() {
 deleteCheckbox.addEventListener("click", deleteChekboxAll);
 
 function deleteChekboxAll() {
-    arrTasks = arrTasks.map(task => task.isDone === true ? {...task, isDone: false} : task)
+    arrTasks = arrTasks.map(task => task.isDone === true ? {...task, isDone: false} : task);
     checkAllTask();
     render();
 }

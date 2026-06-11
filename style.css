@@ -30,6 +30,8 @@ body {
     padding-inline: 20px;
     align-items: center;
     height: 52px;
+
+    
 }
 
 .inputError::placeholder {
