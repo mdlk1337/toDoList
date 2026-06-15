@@ -158,6 +158,7 @@ toggleBtn.forEach(btn => btn.addEventListener('click', (event) => {
   
 }))
 
+
 function allCheckboxToggle() {
     arrTasks = arrTasks.map(task => task.isDone === false ? {...task, isDone: true} : task);
     checkAllTask();
