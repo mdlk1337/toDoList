@@ -4,18 +4,16 @@ body {
 
 .toDolist__wrapper {
     width: 400px;
-    margin: 0 auto;
-    margin-bottom: 80px;
-    margin-top: 20px;
+    margin: 20px auto 80px auto;
 }
 
-.toDolist {
+.toDoList__createTask {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
 }
 
-.btns {
+.toDoList__btns {
     display: flex;
     justify-content: space-around;
 }
@@ -29,7 +27,7 @@ body {
     justify-content: space-between;
     padding-inline: 20px;
     align-items: center;
-    height: 52px;
+    padding-block: 10px;
 }
 
 .inputError::placeholder {
@@ -37,12 +35,12 @@ body {
     font-size: 10px;
 }
 
-.allToggle {
+.toggle__btns {
     width: 440px;
     margin: 0 auto;
     margin-bottom: 10px;
 }
 
-.deleteCheckbox {
+.removeAll__btn {
     display: none;
 }

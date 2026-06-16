@@ -1,11 +1,10 @@
-const btn = document.querySelector('.toDolist__btn');
-const input = document.querySelector('.task_input');
+const input = document.querySelector('.task__input');
 const wrapper = document.querySelector('.wrapper__task');
-const allBtn = document.querySelector('.btn1');
-const finishBtn = document.querySelector('.btn2');
-const notFinishBtn = document.querySelector('.btn3');
-const allToggle = document.querySelector('.addCheckboxAll');
-const deleteCheckbox = document.querySelector('.deleteCheckbox');
+const toDoListBtns = document.querySelectorAll('.btn')
+const toggleBtn = document.querySelectorAll('.toggle__btn')
+const toDoListAddBtn = document.querySelector('.toDolist__btn');
+const toggleRemoveBtn = document.querySelector('.removeAll__btn');
+
 
 
 let arrTasks = [
@@ -44,26 +43,26 @@ function render(tasks = arrTasks) {
         let paragraph = document.createElement('p');
         paragraph.textContent = task.title;
 
-        let btn1 = document.createElement('button');
-        btn1.classList.add('task__btn1');
-        btn1.textContent = 'Редактировать';
-        btn1.dataset.id = task.id;
-        btn1.addEventListener('click', editTask);
+        let taskEditBtn = document.createElement('button');
+        taskEditBtn.classList.add('task__EditBtn');
+        taskEditBtn.textContent = 'Редактировать';
+        taskEditBtn.dataset.id = task.id;
+        taskEditBtn.addEventListener('click', editTask);
         
-        let btn2 = document.createElement('button');
-        btn2.classList.add('task__btn2');
-        btn2.textContent = 'Удалить';
-        btn2.dataset.id = task.id
-        btn2.addEventListener('click', deleteTask);
+        let taskDeleteBtn = document.createElement('button');
+        taskDeleteBtn.classList.add('task__DeleteBtn');
+        taskDeleteBtn.textContent = 'Удалить';
+        taskDeleteBtn.dataset.id = task.id
+        taskDeleteBtn.addEventListener('click', deleteTask);
         
-        block.append(checkbox, paragraph, btn1, btn2);
+        block.append(checkbox, paragraph, taskEditBtn, taskDeleteBtn);
 
         wrapper.append(block);
     }) 
 }
 render();
 
-btn.addEventListener('click', addTask);
+toDoListAddBtn.addEventListener('click', addTask);
 
 function addTask() {
     let text = input.value;
@@ -73,11 +72,6 @@ function addTask() {
         return 
     }
     
-    // arrTasks.push({
-    //     id: Number(new Date()),
-    //     title: text,
-    //     isDone: false,
-    // })
     arrTasks = [...arrTasks, {
         id: Number(Date.now()),
         title: text,
@@ -87,29 +81,39 @@ function addTask() {
     render();
 }
 
+toDoListBtns.forEach(btn => btn.addEventListener('click', (event) => {
+    let target = event.currentTarget;
+    
+    if(target.classList[1] === "theAll__btn") {
+        filterAllTask()
+    }
+    
+    if(target.classList[1] === "completed__btn") {
+        filterDoneTask()
+    }
+
+    if(target.classList[1] === "notCompleted__btn") {
+        filterNotDoneTask()
+    }
+}))
+
 function deleteTask(event) {
-    let id = event.currentTarget.dataset.id
-    arrTasks = arrTasks.filter((task) => task.id !== Number(id));
+    let idCurDeleteBtn = event.currentTarget.dataset.id;
+    arrTasks = arrTasks.filter((task) => task.id !== Number(idCurDeleteBtn));
     render();
 }
 
-finishBtn.addEventListener('click', finishTask);
-
-function finishTask() {
-    let doneTask = arrTasks.filter((task) => task.isDone === true)
+function filterDoneTask() {
+    let doneTask = arrTasks.filter((task) => task.isDone === true);
     render(doneTask);
 }
 
-notFinishBtn.addEventListener('click', notFinishTask);
-
-function notFinishTask() {
+function filterNotDoneTask() {
     let notDoneTask = arrTasks.filter((task) => task.isDone === false);
     render(notDoneTask);
 }
 
-allBtn.addEventListener('click', allTask);
-
-function allTask() {
+function filterAllTask() {
     render(); 
 }
 
@@ -141,7 +145,19 @@ function editTask(event) {
     }
 }
 
-allToggle.addEventListener('click', allCheckboxToggle);
+toggleBtn.forEach(btn => btn.addEventListener('click', (event) => {
+    let target = event.currentTarget;
+
+    if(target.textContent === 'Отметить все') {
+        allCheckboxToggle()
+    }
+
+    if(target.textContent === 'Убрать все') {
+        deleteChekboxAll()
+    }
+  
+}))
+
 
 function allCheckboxToggle() {
     arrTasks = arrTasks.map(task => task.isDone === false ? {...task, isDone: true} : task);
@@ -149,20 +165,17 @@ function allCheckboxToggle() {
     render();
 }
 
-deleteCheckbox.addEventListener("click", deleteChekboxAll);
-
 function deleteChekboxAll() {
-    arrTasks = arrTasks.map(task => task.isDone === true ? {...task, isDone: false} : task)
+    arrTasks = arrTasks.map(task => task.isDone === true ? {...task, isDone: false} : task);
     checkAllTask();
     render();
 }
 
 function checkAllTask() {
     let isAddCheckbox = arrTasks.every(task => task.isDone);
-    console.log(isAddCheckbox);
     if(isAddCheckbox) {
-        deleteCheckbox.style.display = 'inline';
+        toggleRemoveBtn.style.display = 'inline';
     } else {
-        deleteCheckbox.style.display = 'none';
+        toggleRemoveBtn.style.display = 'none';
     }
 }
