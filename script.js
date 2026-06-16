@@ -85,35 +85,35 @@ toDoListBtns.forEach(btn => btn.addEventListener('click', (event) => {
     let target = event.currentTarget;
     
     if(target.classList[1] === "theAll__btn") {
-        allTask()
+        filterAllTask()
     }
     
     if(target.classList[1] === "completed__btn") {
-        finishTask()
+        filterDoneTask()
     }
 
     if(target.classList[1] === "notCompleted__btn") {
-        notFinishTask()
+        filterNotDoneTask()
     }
 }))
 
 function deleteTask(event) {
-    let idCurTask = event.currentTarget.dataset.id;
-    arrTasks = arrTasks.filter((task) => task.id !== Number(id));
+    let idCurDeleteBtn = event.currentTarget.dataset.id;
+    arrTasks = arrTasks.filter((task) => task.id !== Number(idCurDeleteBtn));
     render();
 }
 
-function finishTask() {
+function filterDoneTask() {
     let doneTask = arrTasks.filter((task) => task.isDone === true);
     render(doneTask);
 }
 
-function notFinishTask() {
+function filterNotDoneTask() {
     let notDoneTask = arrTasks.filter((task) => task.isDone === false);
     render(notDoneTask);
 }
 
-function allTask() {
+function filterAllTask() {
     render(); 
 }
 
