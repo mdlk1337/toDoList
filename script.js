@@ -27,6 +27,28 @@ let arrTasks = [
     },
 ]
 
+wrapper.addEventListener('click', (event) => {
+    let element = event.target;
+    
+    if (element.closest('.task__DeleteBtn')) {
+        const deleteBtn = element;
+        deleteTask(deleteBtn);
+        return;
+    }
+
+    if (element.closest('.task__checkbox')) {
+        const checkbox = element;
+        handleCheckbox(checkbox);
+        return
+    }
+
+    if(element.closest('.task__EditBtn')) {
+        const editBtn = element;
+        editTask(editBtn)
+        return
+    }
+})
+
 function render(tasks = arrTasks) {
     wrapper.innerHTML = '';
     tasks.forEach((task) => {
@@ -36,9 +58,9 @@ function render(tasks = arrTasks) {
 
         let checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
+        checkbox.classList.add('.task__checkbox')
         checkbox.checked = task.isDone;
         checkbox.dataset.id = task.id
-        checkbox.addEventListener('click', handleCheckbox)
 
         let paragraph = document.createElement('p');
         paragraph.textContent = task.title;
@@ -47,13 +69,11 @@ function render(tasks = arrTasks) {
         taskEditBtn.classList.add('task__EditBtn');
         taskEditBtn.textContent = 'Редактировать';
         taskEditBtn.dataset.id = task.id;
-        taskEditBtn.addEventListener('click', editTask);
         
         let taskDeleteBtn = document.createElement('button');
         taskDeleteBtn.classList.add('task__DeleteBtn');
         taskDeleteBtn.textContent = 'Удалить';
         taskDeleteBtn.dataset.id = task.id
-        taskDeleteBtn.addEventListener('click', deleteTask);
         
         block.append(checkbox, paragraph, taskEditBtn, taskDeleteBtn);
 
@@ -66,6 +86,7 @@ toDoListAddBtn.addEventListener('click', addTask);
 
 function addTask() {
     let text = input.value;
+    input.value = ""
     
     if(text === "") {
         alert('Название задачи не может быть пустое');
@@ -97,8 +118,8 @@ toDoListBtns.forEach(btn => btn.addEventListener('click', (event) => {
     }
 }))
 
-function deleteTask(event) {
-    let idCurDeleteBtn = event.currentTarget.dataset.id;
+function deleteTask(deleteBtn) {
+    let idCurDeleteBtn = deleteBtn.dataset.id;
     arrTasks = arrTasks.filter((task) => task.id !== Number(idCurDeleteBtn));
     render();
 }
@@ -117,30 +138,29 @@ function filterAllTask() {
     render(); 
 }
 
-function handleCheckbox(event) {
-    let checkboxId = event.currentTarget.dataset.id;
+function handleCheckbox(checkbox) {
+    let checkboxId = checkbox.dataset.id;
     arrTasks = arrTasks.map(task => task.id === Number(checkboxId) ? {...task, isDone: !task.isDone} : task);
     checkAllTask();
 }
 
-function editTask(event) {
-    let curTask = event.currentTarget.dataset.id;
-    let curButton = event.currentTarget;
+function editTask(editBtn) {
+    let curTask = editBtn.dataset.id;
     const input = document.createElement('input');
 
-    if(curButton.previousSibling.value === "") {
-        curButton.previousSibling.classList.add('inputError');
-        curButton.previousSibling.placeholder = "Название не может быть пустым";
+    if(editBtn.previousSibling.value === "") {
+        editBtn.previousSibling.classList.add('inputError');
+        editBtn.previousSibling.placeholder = "Название не может быть пустым";
         return 
     }
     
-    if(curButton.textContent != "Сохранить") {
-        curButton.textContent = "Сохранить";
-        input.value = curButton.previousSibling.textContent;
-        curButton.previousSibling.replaceWith(input);
+    if(editBtn.textContent != "Сохранить") {
+        editBtn.textContent = "Сохранить";
+        input.value = editBtn.previousSibling.textContent;
+        editBtn.previousSibling.replaceWith(input);
     } else {
-        curButton.textContent = "Редактировать";
-        arrTasks = arrTasks.map(task => task.id === Number(curTask) ? {...task, title: curButton.previousSibling.value} : task);
+        editBtn.textContent = "Редактировать";
+        arrTasks = arrTasks.map(task => task.id === Number(editBtn) ? {...task, title: editBtn.previousSibling.value} : task);
         render()
     }
 }
