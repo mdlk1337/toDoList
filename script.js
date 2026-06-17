@@ -102,6 +102,14 @@ function addTask() {
     render();
 }
 
+input.addEventListener('keydown', (e) => {
+
+    if(e.key === "Enter") {
+        addTask()
+    }
+})
+
+
 toDoListBtns.forEach(btn => btn.addEventListener('click', (event) => {
     let target = event.currentTarget;
     
