@@ -20,17 +20,22 @@
     </div>
 
     <div class="filters">
-        <button class="filter-btn active" data-filter="all">
+        <button class="filter-btn theAll__btn  active" data-filter="all">
             Все
         </button>
 
-        <button class="filter-btn" data-filter="completed">
+        <button class="filter-btn completed__btn" data-filter="completed">
             Выполненные
         </button>
 
-        <button class="filter-btn" data-filter="active">
+        <button class="filter-btn active__btn" data-filter="active">
             Активные
         </button>
+    </div>
+
+    <div class="counter-tasks">
+        <span class="counter-task">Количество тасок:</span>
+        <span class="counter-number"></span>
     </div>
 
     <div class="tasks">
@@ -57,9 +62,9 @@
                 <button class="edit-btn">✏️</button>
                 <button class="delete-btn">🗑️</button>
             </div>
-        </div>
-
+        </div>   
     </div>
 </div>
+<script src="script.js"></script>
 </body>
 </html>
