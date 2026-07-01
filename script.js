@@ -1,10 +1,9 @@
-const input = document.querySelector('.task__input');
-const wrapper = document.querySelector('.wrapper__task');
-const toDoListBtns = document.querySelectorAll('.btn')
-const toggleBtn = document.querySelectorAll('.toggle__btn')
-const toDoListAddBtn = document.querySelector('.toDolist__btn');
+const input = document.querySelector('.task-input');
+const wrapper = document.querySelector('.tasks');
+const toDoListBtns = document.querySelectorAll('.filter-btn')
+const toDoListAddBtn = document.querySelector('.add-btn');
 const toggleRemoveBtn = document.querySelector('.removeAll__btn');
-
+const counterTasks = document.querySelector('.counter-number');
 
 
 let arrTasks = [
@@ -30,7 +29,7 @@ let arrTasks = [
 wrapper.addEventListener('click', (event) => {
     let element = event.target;
     
-    if (element.closest('.task__DeleteBtn')) {
+    if (element.closest('.delete-btn')) {
         const deleteBtn = element;
         deleteTask(deleteBtn);
         return;
@@ -42,7 +41,7 @@ wrapper.addEventListener('click', (event) => {
         return
     }
 
-    if(element.closest('.task__EditBtn')) {
+    if(element.closest('.edit-btn')) {
         const editBtn = element;
         editTask(editBtn)
         return
@@ -51,10 +50,20 @@ wrapper.addEventListener('click', (event) => {
 
 function render(tasks = arrTasks) {
     wrapper.innerHTML = '';
+    counterTasks.textContent = arrTasks.length;
+
+    if(arrTasks.length === 0) {
+        wrapper.textContent = "Активных задач нет";
+        wrapper.style.color = "white"
+        return
+    }
     tasks.forEach((task) => {
 
         let block = document.createElement('div'); 
         block.classList.add('task');
+
+        let label = document.createElement('label')
+        label.classList.add('task-content')
 
         let checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -62,20 +71,27 @@ function render(tasks = arrTasks) {
         checkbox.checked = task.isDone;
         checkbox.dataset.id = task.id
 
-        let paragraph = document.createElement('p');
+        let paragraph = document.createElement('span');
         paragraph.textContent = task.title;
 
+        label.append(checkbox, paragraph);
+
+        let taskAction = document.createElement('div');
+        taskAction.classList.add('task-actions');
+
         let taskEditBtn = document.createElement('button');
-        taskEditBtn.classList.add('task__EditBtn');
-        taskEditBtn.textContent = 'Редактировать';
+        taskEditBtn.classList.add('edit-btn');
+        taskEditBtn.textContent = '✏️';
         taskEditBtn.dataset.id = task.id;
         
         let taskDeleteBtn = document.createElement('button');
-        taskDeleteBtn.classList.add('task__DeleteBtn');
-        taskDeleteBtn.textContent = 'Удалить';
+        taskDeleteBtn.classList.add('delete-btn');
+        taskDeleteBtn.textContent = '🗑️';
         taskDeleteBtn.dataset.id = task.id
+
+        taskAction.append(taskEditBtn, taskDeleteBtn)
         
-        block.append(checkbox, paragraph, taskEditBtn, taskDeleteBtn);
+        block.append(label, taskAction);
 
         wrapper.append(block);
     }) 
@@ -112,16 +128,20 @@ input.addEventListener('keydown', (e) => {
 
 toDoListBtns.forEach(btn => btn.addEventListener('click', (event) => {
     let target = event.currentTarget;
-    
+    toDoListBtns.forEach(btn => btn.classList.remove('active'))
+
     if(target.classList[1] === "theAll__btn") {
+        target.classList.add('active')
         filterAllTask()
     }
     
     if(target.classList[1] === "completed__btn") {
+        target.classList.add('active')
         filterDoneTask()
     }
-
-    if(target.classList[1] === "notCompleted__btn") {
+    
+    if(target.classList[1] === "active__btn") {
+        target.classList.add('active')
         filterNotDoneTask()
     }
 }))
@@ -153,38 +173,26 @@ function handleCheckbox(checkbox) {
 }
 
 function editTask(editBtn) {
-    let curTask = editBtn.dataset.id;
-    const input = document.createElement('input');
+    // console.log(editBtn.parentNode.previousSibling.lastChild)
+    let input = document.createElement('input');
+    input.classList.add('task-input')
 
-    if(editBtn.previousSibling.value === "") {
-        editBtn.previousSibling.classList.add('inputError');
-        editBtn.previousSibling.placeholder = "Название не может быть пустым";
-        return 
+   if(editBtn.parentNode.previousSibling.lastChild.value === "") {
+        editBtn.parentNode.previousSibling.lastChild.classList.add('inputError');
+        editBtn.parentNode.previousSibling.lastChild.placeholder = "Название не может быть пустым";
+        return
     }
     
-    if(editBtn.textContent != "Сохранить") {
-        editBtn.textContent = "Сохранить";
-        input.value = editBtn.previousSibling.textContent;
-        editBtn.previousSibling.replaceWith(input);
+    if(editBtn.textContent != "Save") {
+        editBtn.textContent = "Save";
+        input.value = editBtn.parentNode.previousSibling.lastChild.textContent;
+        editBtn.parentNode.previousSibling.lastChild.replaceWith(input);
     } else {
-        editBtn.textContent = "Редактировать";
-        arrTasks = arrTasks.map(task => task.id === Number(editBtn) ? {...task, title: editBtn.previousSibling.value} : task);
+        editBtn.textContent = "✏️";
+        arrTasks = arrTasks.map(task => task.id === Number(editBtn.dataset.id) ? {...task, title: editBtn.parentNode.previousSibling.lastChild.value} : task);
         render()
     }
 }
-
-toggleBtn.forEach(btn => btn.addEventListener('click', (event) => {
-    let target = event.currentTarget;
-
-    if(target.textContent === 'Отметить все') {
-        allCheckboxToggle()
-    }
-
-    if(target.textContent === 'Убрать все') {
-        deleteChekboxAll()
-    }
-  
-}))
 
 
 function allCheckboxToggle() {
